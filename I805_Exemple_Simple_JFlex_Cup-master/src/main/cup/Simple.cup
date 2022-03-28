@@ -1,6 +1,7 @@
 /* package et imports */
 package fr.usmb.m1isc.compilation.simple;
 import java_cup.runtime.Symbol;
+import java.util.HashMap;
 
 // nom de la classe a generer
 class SimpleParser;
@@ -9,6 +10,7 @@ class SimpleParser;
 
 action code {:
     // pour utilisation dans les actions (classe action)
+    HashMap<String,Integer> var = new HashMap<>();
     private boolean erreur = false;
 :};
 
@@ -36,7 +38,7 @@ parser code {:
     }
 :};
 
- init with {:
+init with {:
     //    initialisation du parser
 :};
 
@@ -45,26 +47,26 @@ parser code {:
 terminal PLUS, MOINS, MULT, DIV, PAR_G, PAR_D, MOD, ERR, FIN;
 terminal Integer ENTIER;
 
-terminal LET, EGAL;
-terminal String VAR;
+//terminal LET, EGAL;
+//terminal String VAR;
 
 /* symboles non terminaux */
 
 non terminal Integer expr;
 non terminal liste_expr;
 
-non terminal Integer variable;
+//non terminal Integer variable;
 
 /* Precedences */
 precedence left PLUS, MOINS;
-precedence left MULT, DIVIDE;
+precedence left MULT, DIV;
 
 /* grammaire */
 
-liste_expr	::= expr liste_expr
-			  | expr  ;
+liste_expr    ::= expr liste_expr
+              | expr  ;
 
-variable ::= LET VAR:name EGAL expr:e 	{: vars.put(name,e); RESULT = e; :};
+//variable ::= LET VAR:name EGAL expr:e     {: var.put(name,e); RESULT = e; :};
 
 expr ::=
     expr:e1 PLUS expr:e2 FIN
@@ -77,12 +79,11 @@ expr ::=
         {: if(e2 == 0) { erreur = true; RESULT = 0; System.out.println("division par 0"); }
             else {RESULT=new Integer(e1.intValue()/e2.intValue());}; :} |
     expr:e1 MOD expr:e2 FIN
-     	{: if(e2 == 0) { erreur = true; RESULT = 0; System.out.println("division par 0"); }
+         {: if(e2 == 0) { erreur = true; RESULT = 0; System.out.println("division par 0"); }
             else {RESULT=new Integer(e1.intValue()%e2.intValue());}; :} |
     ENTIER:n {: RESULT=n; :} |
-    	PAR_G expr:e PAR_D PV {: RESULT=e; :} |
-    IDENT:x  {: if(vars.get(x)!=null) { RESULT = vars.get(x); }
-                 else { erreur = true; RESULT = 0; System.out.println("Variable non init"); } :}
+        PAR_G expr:e PAR_D FIN {: RESULT=e; :} |
+    //LET:x  {: if(var.get(x)!=null) { RESULT = var.get(x); }
+    //             else { erreur = true; RESULT = 0; System.out.println("Variable non init"); } :}
     ERR {: erreur = true; :}
     ;
-

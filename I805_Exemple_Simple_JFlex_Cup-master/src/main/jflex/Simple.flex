@@ -37,8 +37,8 @@ variable = [a-zA-Z]+
 
 %%
 
-{nombreNegatif} {return new Symbol(SimpleParserSym.ENTIER,new Integer(yytext()));}
-{nombre} {return new Symbol(SimpleParserSym.ENTIER,new Integer(yytext()));}
+{nombreNegatif} {return new Symbol(SimpleParserSym.ENTIER, new Integer(yytext()));}
+{nombre} {return new Symbol(SimpleParserSym.ENTIER, new Integer(yytext()));}
 "+" {return new Symbol(SimpleParserSym.PLUS);}
 "-" {return new Symbol(SimpleParserSym.MOINS);}
 "*" {return new Symbol(SimpleParserSym.MULT);}
@@ -51,7 +51,6 @@ variable = [a-zA-Z]+
 {blanc} { ; /* on fait rien */ }
 {com} { ; /* on fait rien */ }
 
-"let" {return new Symbol(SimpleParserSym.LET);}
-"=" {return new Symbol(SimpleParserSym.EGAL);}
-{variable} {return new Symbol(SimpleParserSym.VAR);}
-
+//"let" {return new Symbol(SimpleParserSym.LET);}
+//"=" {return new Symbol(SimpleParserSym.EGAL);}
+//{variable} {return new Symbol(SimpleParserSym.VAR);}
